@@ -4,7 +4,7 @@ const redis = require('redis')
 const redisClient = redis.createClient({
     host: keys.redisHost,
     port: keys.redisPort,
-    retry_strategy: () => 1000 // reconnect in 1 sec if loose connection
+    retry_strategy: () => 1000, // reconnect in 1 sec if loose connection
 })
 
 // if send regular commands to Redis while in subscriber mode, just open another connection with a new client for subscribing a channel for a standalone connection
@@ -12,8 +12,7 @@ const sub = redisClient.duplicate()
 
 function fib(index)
 {
-    if (index < 2)
-    return 1
+    if (index < 2) return 1
     return fib(index - 1) + fib(index - 2)
 }
 

@@ -1,12 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import OtherPage from './OtherPage'
 import Fib from './Fib'
 
 function App() {
   return (
     <Router>
+      <Switch>
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -19,7 +20,7 @@ function App() {
             Learn React
           </a>
           <Link to='/'>Home</Link>
-          <Link to='/oherpage'>Other Page</Link>
+          <Link to='/otherpage'>Other Page</Link>
           </header>  
         <div>
           <Route path='/' component={Fib} exact/>
@@ -27,6 +28,7 @@ function App() {
         </div>
       
     </div>
+    </Switch>
     </Router>
   );
 }

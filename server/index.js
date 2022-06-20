@@ -1,13 +1,13 @@
 const keys = require('./keys')
 // Express app setup
 const express = require('express')
-const bodyParse = require('body-parser')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const app = express() // create express app
 
 app.use(cors()) // cross origin sharing that allows make request from one domain(react app is running onto a different domain/port the Express API hosted on)
-app.use(bodyParse.json()) //parse incoming react app and turn the body of the post request into JSON value
+app.use(bodyParser.json()) //parse incoming react app and turn the body of the post request into JSON value
 
 // Postgres client setup
 const {Pool} = require('pg')
@@ -52,7 +52,7 @@ app.get('/values/all', async (req, res) =>
 
 // route to get all indices along with calculated values stored in redis
 app.get('/values/current', async(req, res) => {
-    redisClient.hgetAll('values', (err, values) =>
+    redisClient.hgetall('values', (err, values) =>
     {
         res.send(values)
     })
