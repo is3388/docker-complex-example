@@ -1,0 +1,39 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+# run test suites using the dev version of Dockerfile
+before_install:
+  - docker build -t iris77docker/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true iris77docker/react-test npm run test -- -- watchAll=false
+
+# build all sub folder
+after_success:
+  - docker build -t iris77docker/multi-client ./client
+  - docker build -t iris77docker/multi-nginx ./nginx
+  - docker build -t iris77docker/multi-server ./server
+  - docker build -t iris77docker/multi-worker ./worker
+  # log into docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password -stdin
+  # take those images and push to docker hub
+  - docker push iris77docker/multi-client
+  - docker push iris77docker/multi-nginx
+  - docker push iris77docker/multi-server
+  - docker push iris77docker/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-923445559289'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+
+  
